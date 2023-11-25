@@ -1,25 +1,15 @@
-import express, { Express, Request, Response } from "express";
-import knex from "knex";
-import knexfile from "../knexfile";
+import dotenv from "dotenv";
+import express, { Express } from "express";
+import Routes from "./routes";
+import { RabbitMQService } from "./utils/rabbitmq.service";
+dotenv.config();
 
 const app: Express = express();
-const db = knex(knexfile);
-
-app.get("/", (req: Request, res: Response) => {
-  db.insert({
-    title: "Hello World",
-    body: "This is a test post",
-  })
-    .into("posts")
-    .then((post) => {
-      console.log(post);
-    })
-    .catch((err) => {
-      console.log(err, 'erro');
-    });
-  res.send("Hello World!");
-});
-
+app.use(express.json());
+app.use(Routes);
 app.listen(3000, () => {
   console.log("Server listening on port 3000");
 });
+
+const rabbitmq = new RabbitMQService();
+rabbitmq.init();

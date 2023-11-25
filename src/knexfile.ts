@@ -5,6 +5,7 @@ const config: Knex.Config = {
   connection: {
     filename: "./db/db.sqlite",
   },
+  pool: { min: 0, max: 7 },
   useNullAsDefault: true,
   migrations: {
     tableName: 'knex_migrations',
